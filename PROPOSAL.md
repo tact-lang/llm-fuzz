@@ -10,10 +10,12 @@ Similar experiments utilizing LLM-driven fuzzing have demonstrated substantial s
 
 ### Current Results
 
-In a preliminary test conducted with an $100 API budget using the o3-mini model:
+In a preliminary test conducted with **5,000 LLM requests** (**~100 million** tokens processed, **$100** in costs) using the **o3-mini** model:
 
--   **10 issues** were identified quickly: 2 minor compiler bugs, 2 duplicates of known but unresolved bugs, and 6 mismatches between documentation and actual compiler implementation.
--   **False Positive Rate:** Approximately 33% (5 false positives apart from 10 valid findings). This rate is relatively low given the rapid, one-day implementation and can be further improved through careful tuning and validation mechanisms.
+-   **10 issues** were identified quickly: 2 minor compiler bugs, 2 duplicates of known but unresolved bugs, and 6 mismatches between documentation and actual implementation.
+-   **False Positive Rate:** ~33% (5 false positives out of 15 reported findings).
+
+This was achieved with a small-scale, one-day pipeline and can be significantly improved with better agent structure and prompt engineering.
 
 ### Scaling Dimensions
 
@@ -38,28 +40,38 @@ There are several effective ways to integrate this fuzzing approach into our dev
 
 ### Funding Estimates
 
-To scale this experiment effectively, I am proposing a phased approach:
+To scale this experiment effectively, I propose a phased approach:
 
--   **Phase 1: Experimental Budget**
+#### Phase 1: Experimental Setup (40–50k requests, ~800–1000M tokens)
 
-    -   Requesting an initial budget of **$1,000** to support further experimentation.
-    -   This phase will include many small-to-medium runs using different models (e.g., o3-mini, GPT-4, Claude Sonnet) and varying pipeline/prompt setups.
-    -   Goal: evaluate cost-to-findings ratio, optimize pipeline design, and choose the most efficient configuration for scaling.
-    -   Expected side benefit: uncovering more issues during experimentation.
+-   Run multiple small-to-medium fuzzing loops.
+-   Test different models (o3-mini, Claude Sonnet, GPT-4).
+-   Optimize prompt engineering, the data pipeline, and issue validation logic.
+-   Expectation: uncover dozens of new issues and build baseline metrics for cost-effectiveness.
 
--   **Phase 2: Scaled Run of Optimized Setup**
+#### Phase 2: Scaled Execution (400–500k requests, ~8–10B tokens)
 
-    -   Using the most effective configuration discovered in Phase 1, we scale the experiment to a **$5,000** budget.
-    -   Objective: analyze how effectiveness changes with budget and run size, assess limits of horizontal/depth scaling, and gather larger sample of findings.
+-   Use the best-performing pipeline from Phase 1.
+-   Run large-scale fuzzing campaigns.
+-   Discover more issues, gather more metrics, and extract deeper insights.
 
--   **Phase 3: Long-Term Strategy Evaluation**
-    -   Based on Phase 2 results, we can define the most efficient way to integrate the system into our development process. Options include:
-        -   Periodic medium-to-large runs tied to compiler releases.
-        -   Lightweight daily/weekly runs to catch regressions.
-        -   Full CI integration for all compiler PRs to detect real-time issues, documentation mismatches, or edge-case regressions.
+#### Phase 3: Integration Pilot (TBD requests, based on results)
 
-This phased approach allows for cost-efficient exploration, scalable evaluation, and practical integration tailored to TON Studio’s needs.
+-   Based on insights from Phase 2, experiment with:
+    -   Periodic medium-to-large runs tied to compiler releases.
+    -   Lightweight daily/weekly runs to catch regressions.
+    -   Full CI integration for all compiler PRs to detect real-time issues, documentation mismatches, or edge-case regressions.
 
-### Conclusion
+---
 
-This approach offers a powerful, innovative, and scalable method for improving compiler reliability and documentation accuracy, aligning well with TON Studio's strategic goals. With minimal upfront investment and clear scaling paths, integrating LLM-driven smart fuzzing into the development workflow can significantly enhance Tact compiler quality and maintainability.
+### Cost Summary
+
+| Phase                   | Requests | Tokens (est.) | Estimated Cost |
+| ----------------------- | -------- | ------------- | -------------- |
+| Phase 1                 | 50,000   | 1B            | ~$1,000        |
+| Phase 2                 | 500,000  | 10B           | ~$10,000       |
+| Integration Pilot (TBD) | TBD      | TBD           | TBD            |
+
+> **Total requested budget: ~$11,000**  
+> Covers ~550k requests across different models.  
+> This enables thorough experimentation and a large-scale run.
