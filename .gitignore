@@ -26,3 +26,6 @@ Thumbs.db
 # Logs
 *.log
 .openai_api_key 
+
+# Embeddings cache
+.embed_cache/
