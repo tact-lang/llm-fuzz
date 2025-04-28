@@ -7,7 +7,7 @@ Pipeline
 1. Embed every summary with an OpenAI embedding model (default: text-embedding-3-large).
    • Vectors cached to <cache_dir>/<fingerprint>.npy  (fingerprint = SHA-1 of ids).
 2. Normalize vectors to unit length.
-3. Cluster with HDBSCAN (density-based, deterministic random_state=42).
+3. Cluster with HDBSCAN (density-based, deterministic).
 4. Keep one representative per cluster (earliest numeric path); keep all noise.
 5. Write representatives to OUTPUT.jsonl (sorted by path).
 6. Save labels to <cache_dir>/<fingerprint>.labels.npy for later inspection.
